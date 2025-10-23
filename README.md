@@ -1,1 +1,286 @@
 # AstroxDevz.github.io
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Guía rápida: `*` y `&` en C++ — Tabla</title>
+  <style>
+    /* ===== Reset ligero ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html,body { height:100%; margin:0; padding:0; background:#0f1724; color:#d9e6f2; font-family: "Fira Code", "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, monospace; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+    /* ===== Contenedor ===== */
+    .wrap {
+      max-width:1100px;
+      margin:48px auto;
+      padding:28px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius:14px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      overflow: hidden;
+      padding:20px;
+      backdrop-filter: blur(6px);
+    }
+
+    header.hdr {
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .logo {
+      width:64px;
+      height:64px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(135deg,#06b6d4,#7c3aed);
+      box-shadow: 0 6px 18px rgba(124,58,237,0.18);
+      font-size:22px;
+      font-weight:700;
+      color:white;
+      transform: rotate(-8deg);
+    }
+
+    h1 {
+      margin:0;
+      font-size:20px;
+      letter-spacing: -0.02em;
+      color:#e6f0ff;
+    }
+    p.lead {
+      margin:6px 0 0 0;
+      color:#9fb4d1;
+      font-size:13px;
+    }
+
+    /* ===== Tabla ===== */
+    .table-wrap {
+      margin-top:18px;
+      overflow:auto;
+      border-radius:10px;
+      padding:8px;
+    }
+
+    table.guide {
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      min-width:900px;
+    }
+
+    thead th {
+      position:sticky;
+      top:0;
+      background: linear-gradient(90deg, rgba(124,58,237,0.12), rgba(6,182,212,0.06));
+      color:#ecf8ff;
+      font-weight:600;
+      text-align:left;
+      padding:14px 16px;
+      font-size:13px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(3px);
+    }
+
+    thead th:first-child { border-top-left-radius:8px; }
+    thead th:last-child  { border-top-right-radius:8px; }
+
+    tbody tr {
+      transition: background 220ms ease, transform 160ms ease;
+    }
+
+    tbody tr:nth-child(even) {
+      background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    }
+
+    tbody tr:hover {
+      background: linear-gradient(90deg, rgba(124,58,237,0.06), rgba(6,182,212,0.02));
+      transform: translateY(-2px);
+    }
+
+    td {
+      padding:14px 16px;
+      vertical-align:top;
+      border-bottom: 1px dashed rgba(255,255,255,0.03);
+      font-size:13px;
+      color:#dbeefe;
+    }
+
+    td.symbol {
+      width:72px;
+      font-size:20px;
+      font-weight:700;
+      text-align:center;
+      color:#061025;
+      background: linear-gradient(180deg,#06b6d4,#7c3aed);
+      border-radius:8px;
+      box-shadow: 0 6px 18px rgba(7,12,23,0.6), inset 0 -6px 18px rgba(255,255,255,0.06);
+      transform: skewX(-6deg);
+      padding:18px 12px;
+      color:white;
+    }
+
+    td.context {
+      color:#cfe9ff;
+      width:160px;
+      font-weight:600;
+    }
+
+    td.meaning {
+      color:#e6f6ff;
+      width:280px;
+    }
+
+    td.example code {
+      display:inline-block;
+      background: rgba(0,0,0,0.25);
+      padding:6px 10px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.03);
+      font-family: "Fira Code", monospace;
+      font-size:12.5px;
+      color:#fff;
+      box-shadow: 0 4px 10px rgba(2,6,23,0.5);
+    }
+
+    td.expl {
+      color:#b8d6f0;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    /* ===== Footer / nota ===== */
+    .note {
+      margin-top:16px;
+      font-size:13px;
+      color:#98b6d4;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .kbd {
+      display:inline-block;
+      background:rgba(255,255,255,0.02);
+      padding:6px 10px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.03);
+      font-family:inherit;
+      font-size:12px;
+      color:#dff6ff;
+    }
+
+    /* ===== Responsive tweaks ===== */
+    @media (max-width:720px) {
+      .wrap { padding:16px; margin:18px; }
+      thead th { font-size:12px; padding:12px; }
+      td { padding:10px; font-size:12px; }
+      td.symbol { display:inline-block; min-width:56px; padding:12px; font-size:16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Guía sobre el uso de * y & en C++">
+      <header class="hdr">
+        <div class="logo">C++</div>
+        <div>
+          <h1>Guía rápida — cuándo usar <code>*</code> y <code>&amp;</code> en C++</h1>
+          <p class="lead">Tabla concisa orientada a programadores — ejemplos y explicación breve para cada caso.</p>
+        </div>
+      </header>
+
+      <div class="table-wrap" tabindex="0">
+        <table class="guide" summary="Tabla explicativa sobre el uso de * y & en C++">
+          <thead>
+            <tr>
+              <th>Símbolo</th>
+              <th>Contexto</th>
+              <th>Significado</th>
+              <th>Ejemplo</th>
+              <th>Explicación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="symbol"><code>*</code></td>
+              <td class="context">Declaración de variable</td>
+              <td class="meaning">Declara un <strong>puntero</strong> (variable que guarda una dirección de memoria)</td>
+              <td class="example"><code>int* ptr;</code></td>
+              <td class="expl"><strong>ptr</strong> puede almacenar la dirección de un <code>int</code>. Es una variable cuyo valor es una dirección.</td>
+            </tr>
+
+            <tr>
+              <td class="symbol"><code>*</code></td>
+              <td class="context">Desreferenciación</td>
+              <td class="meaning">Accede al <strong>valor apuntado</strong> por un puntero</td>
+              <td class="example"><code>int valor = *ptr;</code></td>
+              <td class="expl">Si <code>ptr</code> apunta a una dirección con un <code>int</code>, <code>*ptr</code> obtiene ese valor.</td>
+            </tr>
+
+            <tr>
+              <td class="symbol"><code>*</code></td>
+              <td class="context">En función (parámetro)</td>
+              <td class="meaning">Recibe un <strong>puntero</strong> como argumento</td>
+              <td class="example"><code>void funcion(int* p)</code></td>
+              <td class="expl">La función recibe la dirección de un <code>int</code> y puede modificar el valor apuntado usando <code>*p</code>.</td>
+            </tr>
+
+            <tr>
+              <td class="symbol"><code>*</code></td>
+              <td class="context">En función (retorno)</td>
+              <td class="meaning">Devuelve un <strong>puntero</strong></td>
+              <td class="example"><code>int* crearEntero();</code></td>
+              <td class="expl">La función devuelve una dirección de memoria que apunta a un <code>int</code> (cuidado con la validez del objeto apuntado).</td>
+            </tr>
+
+            <tr>
+              <td class="symbol">&amp;</td>
+              <td class="context">En declaración</td>
+              <td class="meaning">Declara una <strong>referencia</strong> (alias de una variable)</td>
+              <td class="example"><code>int& ref = valor;</code></td>
+              <td class="expl"><strong>ref</strong> es otro nombre para <code>valor</code>; no crea copia y no puede reseñar a otro objeto tras la inicialización.</td>
+            </tr>
+
+            <tr>
+              <td class="symbol">&amp;</td>
+              <td class="context">En uso (operador unario)</td>
+              <td class="meaning">Obtiene la <strong>dirección</strong> de una variable</td>
+              <td class="example"><code>int* ptr = &valor;</code></td>
+              <td class="expl"><code>&valor</code> devuelve la dirección de <code>valor</code>. Es lo contrario de la desreferenciación.</td>
+            </tr>
+
+            <tr>
+              <td class="symbol">&amp;</td>
+              <td class="context">En función (parámetro)</td>
+              <td class="meaning">Pasa un valor <strong>por referencia</strong></td>
+              <td class="example"><code>void funcion(int& x)</code></td>
+              <td class="expl">La función puede modificar directamente la variable original (sin usar punteros). Sintaxis clara y segura.</td>
+            </tr>
+
+            <tr>
+              <td class="symbol">&amp;</td>
+              <td class="context">En función (retorno)</td>
+              <td class="meaning">Devuelve una <strong>referencia</strong></td>
+              <td class="example"><code>int& obtenerRef();</code></td>
+              <td class="expl">Devuelve un alias a un objeto existente para poder modificarlo desde el llamador. Evitar devolver referencias a objetos temporales.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <div>Consejo: <span class="kbd">&ast;</span> punteros → dirección/indirección. <span class="kbd">&amp;</span> referencias → alias / <span class="kbd">&amp;</span> operador → dirección.</div>
+        <div style="font-size:12px;color:#7fb1d9">Haz scroll horizontal si estás en móvil</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
